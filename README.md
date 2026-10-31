@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sales Events Portal
 
-## Getting Started
+Admin portal for dealership Facebook sales events (replaces the Google Sheets).
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The database is a local SQLite file at `data/app.db`, created and filled with demo data on first run.
+Delete the `data/` folder to start over. Uploaded reports live in `data/uploads/`. Ad copy and images are Google Doc / Google Drive links on each event.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Roles
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+There is no login yet. Use **Viewing as** in the top-right to switch between:
 
-## Learn More
+- **Admin team** – spreadsheet grid of all events (paste Google Doc/Drive links right into the grid), dealerships + GHL/CloseBot setup queue, ad copy approval, reports
+- **Client** – add dealerships and events, current and past events, approve ad copy (Google Doc), download reports. Sees "AI Bot" instead of CloseBot.
+- **BDC team** – upcoming/running events only, one-page event summary with PDF download
+- **Retargeting team** – active events only (Scheduled, Running, Paused), each with an "Open retargeting sheet" button
 
-To learn more about Next.js, take a look at the following resources:
+Role checks live in `src/lib/session.ts`; that's the one file to change when real logins are added.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where things are
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/lib/db.ts` – schema; `src/lib/seed.ts` – demo data
+- `src/app/actions.ts` – every save/update
+- `src/app/(app)/admin`, `client`, `bdc` – pages per role; `src/app/share` – login-free ad copy approval link
